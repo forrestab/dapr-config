@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "serviceActions": {
+        "api": "StartDebugging",
+        "api-dapr": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging",
+        "adminer": "StartWithoutDebugging",
+        "zipkin": "StartWithoutDebugging"
+      }
+    }
+  }
+}

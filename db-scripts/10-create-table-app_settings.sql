@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS app_settings (
+    KEY         VARCHAR NOT NULL,
+    VALUE       VARCHAR NOT NULL,
+    VERSION     VARCHAR NOT NULL,
+    METADATA    JSON 
+);

@@ -1,0 +1,47 @@
+version: '3.4'
+
+services:
+
+  daprconfig.api:
+    image: ${DOCKER_REGISTRY-}daprconfigapi
+    container_name: api
+    build:
+      context: .
+      dockerfile: src/DaprConfig.Api/Dockerfile
+
+  api-dapr:
+    image: daprio/daprd:1.11.2
+    command: [
+      "./daprd",
+      "--app-id", "api",
+      "--app-port", "443",
+      "--resources-path", "/components",
+      "--config", "/configuration/api-config.yml",
+      "--log-level", "debug",
+      "--log-as-json"
+    ]
+    volumes:
+      - ./dapr/components:/components
+      - ./dapr/configuration:/configuration
+    network_mode: "service:daprconfig.api" # important
+    depends_on:
+      - daprconfig.api
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=config
+    volumes:
+      - ./db-scripts:/docker-entrypoint-initdb.d
+
+  adminer:
+    image: adminer:4-standalone
+    ports:
+      - 8080:8080
+
+  zipkin:
+    image: openzipkin/zipkin-slim
+    ports:
+      - 5411:9411
